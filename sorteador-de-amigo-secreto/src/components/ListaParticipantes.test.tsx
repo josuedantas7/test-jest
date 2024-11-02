@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
 import { ListaParticpantes } from "./ListaParticpantes";
-import Formulario from "./Formulario";
 import { useListaDeParticipantes } from "../state/hooks/useListaDeParticipantes";
 
 jest.mock("../state/hooks/useListaDeParticipantes", () => {
@@ -39,7 +38,7 @@ describe("DESCRIBE: lista de participantes preenchida", () => {
   test("testando lista de parcipantes com dois itens", () => {
     render(
       <RecoilRoot>
-        <Formulario />
+        <ListaParticpantes />
       </RecoilRoot>
     );
 
