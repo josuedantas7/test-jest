@@ -9,3 +9,8 @@ export const errorState = atom<string>({
     key: 'errorState',
     default: ''
 })
+
+export const resultadoAmigoSecreto = atom<Map<string, string>>({
+    key: 'resultadoAmigoSecretoState',
+    default: new Map()
+})
