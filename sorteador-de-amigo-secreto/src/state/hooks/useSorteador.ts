@@ -10,6 +10,7 @@ export const useSorteador = () => {
   return () => {
     const resultado = realizarSorteio(participantes);
 
-    return setResultado(resultado);
+    setResultado(resultado);
+    return 
   };
 };
