@@ -1,84 +1,129 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import Formulario from "./Formulario";
 import { RecoilRoot } from "recoil";
 
-test("quando o input está vazio, novos participantes não podem ser adicionados", () => {
-  render(
-    <RecoilRoot>
-      <Formulario />
-    </RecoilRoot>
-  );
+describe("O comportamento do Formulário.tsx", () => {
+  test("quando o input está vazio, novos participantes não podem ser adicionados", () => {
+    render(
+      <RecoilRoot>
+        <Formulario />
+      </RecoilRoot>
+    );
 
-  const input = screen.getByPlaceholderText(
-    "Insira os nomes dos participantes"
-  );
+    const input = screen.getByPlaceholderText(
+      "Insira os nomes dos participantes"
+    );
 
-  const botao = screen.getByRole("button");
+    const botao = screen.getByRole("button");
 
-  expect(input).toBeInTheDocument();
+    expect(input).toBeInTheDocument();
 
-  expect(botao).toBeDisabled();
-});
-
-test("adicionar um participante caso exista um nome preenchido", () => {
-  render(
-    <RecoilRoot>
-      <Formulario />
-    </RecoilRoot>
-  );
-
-  const input = screen.getByPlaceholderText(
-    "Insira os nomes dos participantes"
-  );
-
-  const botao = screen.getByRole("button");
-
-  fireEvent.change(input, {
-    target: {
-      value: "Ana Catarina",
-    },
+    expect(botao).toBeDisabled();
   });
 
-  fireEvent.click(botao);
+  test("adicionar um participante caso exista um nome preenchido", () => {
+    render(
+      <RecoilRoot>
+        <Formulario />
+      </RecoilRoot>
+    );
 
-  expect(input).toHaveFocus();
+    const input = screen.getByPlaceholderText(
+      "Insira os nomes dos participantes"
+    );
 
-  expect(input).toHaveValue("");
-});
+    const botao = screen.getByRole("button");
 
-test("nomes duplicados não podem ser adicionados na lista", () => {
-  render(
-    <RecoilRoot>
-      <Formulario />
-    </RecoilRoot>
-  );
+    fireEvent.change(input, {
+      target: {
+        value: "Ana Catarina",
+      },
+    });
 
-  const input = screen.getByPlaceholderText(
-    "Insira os nomes dos participantes"
-  );
+    fireEvent.click(botao);
 
-  const botao = screen.getByRole("button");
+    expect(input).toHaveFocus();
 
-  fireEvent.change(input, {
-    target: {
-      value: "Ana Catarina",
-    },
+    expect(input).toHaveValue("");
   });
 
-  fireEvent.click(botao);
+  test("nomes duplicados não podem ser adicionados na lista", () => {
+    render(
+      <RecoilRoot>
+        <Formulario />
+      </RecoilRoot>
+    );
 
-  fireEvent.change(input, {
-    target: {
-      value: "Ana Catarina",
-    },
+    const input = screen.getByPlaceholderText(
+      "Insira os nomes dos participantes"
+    );
+
+    const botao = screen.getByRole("button");
+
+    fireEvent.change(input, {
+      target: {
+        value: "Ana Catarina",
+      },
+    });
+
+    fireEvent.click(botao);
+
+    fireEvent.change(input, {
+      target: {
+        value: "Ana Catarina",
+      },
+    });
+
+    fireEvent.click(botao);
+
+    const mensagemDeErro = screen.getByRole("alert");
+
+    expect(mensagemDeErro.textContent).toBe(
+      "Nomes duplicados não são permitidos!"
+    );
   });
 
-  fireEvent.click(botao);
+  test("erro de nome duplicado deve sumir após 3 segundos", () => {
+    jest.useFakeTimers();
+    render(
+      <RecoilRoot>
+        <Formulario />
+      </RecoilRoot>
+    );
 
-  const mensagemDeErro = screen.getByRole("alert");
+    const input = screen.getByPlaceholderText(
+      "Insira os nomes dos participantes"
+    );
 
-  expect(mensagemDeErro.textContent).toBe(
-    "Nomes duplicados não são permitidos!"
-  );
+    const botao = screen.getByRole("button");
+
+    fireEvent.change(input, {
+      target: {
+        value: "Ana Catarina",
+      },
+    });
+
+    fireEvent.click(botao);
+
+    fireEvent.change(input, {
+      target: {
+        value: "Ana Catarina",
+      },
+    });
+
+    fireEvent.click(botao);
+
+    let mensagemDeErro = screen.queryByRole("alert");
+
+    expect(mensagemDeErro).toBeInTheDocument();
+
+    act(() => {
+      jest.runAllTimers();
+    });
+
+    mensagemDeErro = screen.queryByRole("alert");
+
+    expect(mensagemDeErro).toBeNull();
+  });
 });
