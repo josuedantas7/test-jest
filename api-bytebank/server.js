@@ -123,6 +123,6 @@ server.use(/^(?!\/(public|transacoes|saldo)).*$/, (req, res, next) => {
 
 server.use(router);
 
-server.listen(8000, () => {
-  console.log("Servidor escutando em http://localhost:8000");
+server.listen(3002, () => {
+  console.log("Servidor escutando em http://localhost:3002");
 });
