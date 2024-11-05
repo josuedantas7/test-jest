@@ -8,7 +8,7 @@ describe('Formulário de cadastro', () => {
         cy.getByData('botao-cadastro').click()
 
         cy.getByData('nome-input').type('Josué Dantas')
-        cy.getByData('email-input').type('dantas@gmail.com')
+        cy.getByData('email-input').type('dantas3@gmail.com')
         cy.getByData('senha-input').type('123456')
         cy.getByData('checkbox-input').click()
 
